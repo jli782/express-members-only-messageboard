@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar header</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <!-- navbar items, navbar burger... -->
+        <a class="navbar-item" href="/">Members Only message board</a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <!-- <a href="/" class="button is-light"> Log in </a> -->
+            <!-- if user is logged in -->
+            <% if (user !== undefined){ %>
+            <p>Welcome back <%= user.username%>!</p>
+            <a href="/users/sign-out" class="button is-light">Log out</a>
+            <% } else { %>
+            <!-- if user is NOT logged in -->
+            <a href="/users/register" class="button is-primary">
+              <strong>Register</strong>
+            </a>
+            <a href="/" class="button is-light">Log in</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>

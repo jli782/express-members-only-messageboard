@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Sign In</title>
+  </head>
+  <body>
+    <%- include('header') -%>
+    <div class="container">
+      <div class="notification is-primary">
+        <h1 class="title">User Sign In</h1>
+        <form method="POST" action="">
+          <div class="field">
+            <label for="username" class="label">Username</label>
+            <div class="control">
+              <input
+                name="username"
+                class="input"
+                type="email"
+                required
+                placeholder="username goes here ..."
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="password" class="label">Password</label>
+            <div class="control">
+              <input
+                name="password"
+                class="input"
+                type="password"
+                required
+                placeholder="password goes here ..."
+              />
+            </div>
+          </div>
+          <button type="submit" class="button is-light">Sign In</button>
+          <% if (err){ %> <% if (err.length > 1) { %> <% for (let error of err){
+          %>
+          <p><%= error.msg %></p>
+          <% }%> <% } else { %>
+          <p><%= err.msg %></p>
+          <% } %> <% } %>
+        </form>
+      </div>
+    </div>
+    <%- include('footer') -%>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <%- include('header') -%>
+
+    <div class="container">
+      <div class="notification is-primary">
+        <h1 class="title"><%= title %></h1>
+        <form action="" method="POST">
+          <div class="field">
+            <label for="is_member" class="label">Membership Key: </label>
+            <div class="control">
+              <input
+                name="is_member"
+                class="input"
+                type="password"
+                required
+                placeholder="membership key goes here ..."
+              />
+            </div>
+          </div>
+          <button type="submit" class="button is-light">Submit</button>
+          <% if (err){ %> <% if (err.length > 1) { %> <% for (let error of err){
+          %>
+          <p><%= error.msg %></p>
+          <% }%> <% } else { %>
+          <p><%= err.msg %></p>
+          <% } %> <% } %>
+        </form>
+      </div>
+    </div>
+    <%- include('footer') -%>
+  </body>
+</html>

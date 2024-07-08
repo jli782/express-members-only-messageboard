@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration</title>
+  </head>
+  <body>
+    <%- include('header'); -%>
+    <div class="container">
+      <div class="notification is-primary">
+        <h1 class="title">Registration - creating new user</h1>
+        <form action="" method="POST">
+          <div class="field">
+            <label for="username" class="label">Username</label>
+            <div class="control">
+              <input
+                name="username"
+                class="input"
+                type="email"
+                required
+                placeholder="username goes here ..."
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="first" class="label">First Name</label>
+            <div class="control">
+              <input
+                name="first"
+                class="input"
+                type="text"
+                required
+                placeholder="first name goes here ..."
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="last" class="label">Surname</label>
+            <div class="control">
+              <input
+                name="last"
+                class="input"
+                type="text"
+                required
+                placeholder="Surname goes here ..."
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="password" class="label">Password</label>
+            <div class="control">
+              <input
+                name="password"
+                class="input"
+                type="password"
+                required
+                placeholder="Password goes here ..."
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="confirm_password" class="label">Confirm Password</label>
+            <div class="control">
+              <input
+                name="confirm_password"
+                class="input"
+                type="password"
+                required
+                placeholder="confirm your password  here ..."
+              />
+            </div>
+          </div>
+          <button type="submit" class="button is-light">Register</button>
+          <% if (err){ %> <% if (err.length > 1) { %> <% for (let error of err){
+          %>
+          <p><%= error.msg %></p>
+          <% }%> <% } else { %>
+          <p><%= err.msg %></p>
+          <% } %> <% } %>
+        </form>
+      </div>
+    </div>
+    <%- include('footer'); -%>
+  </body>
+</html>
