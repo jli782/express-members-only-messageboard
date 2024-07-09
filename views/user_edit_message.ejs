@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <%- include('header') -%>
+    <div class="container">
+      <div class="notification is-primary">
+        <h1 class="title"><%= title %></h1>
+        <form action="" method="POST">
+          <div class="field">
+            <label for="title" class="label">Title</label>
+            <div class="control">
+              <input
+                name="title"
+                class="input"
+                type="text"
+                placeholder="a title goes here ..."
+                value="<%if (message != undefined){ %><%= message.title %><% } %>"
+              />
+            </div>
+          </div>
+          <label for="text" class="label">Message Body</label>
+          <textarea
+            class="textarea"
+            placeholder="e.g. a message goes here ..."
+            name="text"
+          >
+<%if (message != undefined){ %><%= message.text %><% } %></textarea
+          >
+          <button
+            type="submit"
+            class="button is-light"
+            style="margin-top: 15px"
+          >
+            Update
+          </button>
+          <% if (err){ %> <% if (err.length > 1) { %> <% for (let error of err){
+          %>
+          <p><%= error.msg %></p>
+          <% }%> <% } else { %>
+          <p><%= err.msg %></p>
+          <% } %> <% } %>
+        </form>
+      </div>
+    </div>
+    <%- include('footer') -%>
+  </body>
+</html>

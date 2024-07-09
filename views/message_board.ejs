@@ -11,6 +11,7 @@
       <div class="notification is-primary">
         <h1 class="title"><%= title %></h1>
         <!-- post message modal trigger btn -->
+        <% if (user !== undefined){ %>
         <button
           type="submit"
           class="js-modal-trigger button is-light"
@@ -18,6 +19,8 @@
         >
           Post Message
         </button>
+        <% } %>
+
         <!-- post message modal -->
         <div id="modal-post-message" class="modal">
           <div class="modal-background"></div>
@@ -55,8 +58,6 @@
               <span>Click anywhere outside modal to cancel.</span>
             </footer>
           </div>
-
-          <button class="modal-close is-large" aria-label="close"></button>
         </div>
 
         <div class="section">
@@ -64,10 +65,53 @@
           <article class="message">
             <div class="message-header">
               <p><%= message.title %></p>
+              <!-- edit message modal trigger btn -->
+              <% if (user._id.toString() === message.postedBy._id.toString()) {
+              %>
+              <a href="/message/edit/<%= message._id %>"
+                ><button>Edit <%= message._id %></button></a
+              >
+              <% } %>
+              <!-- delete message modal trigger btn -->
+              <% if (user.isAdmin){ %>
+              <button
+                class="js-modal-trigger"
+                data-target="modal-delete-message <%= message._id %>"
+              >
+                Delete <%= message._id %>
+              </button>
+              <!-- delete message modal -->
+              <div id="modal-delete-message <%= message._id %>" class="modal">
+                <div class="modal-background"></div>
+
+                <div class="modal-card">
+                  <header class="modal-card-head">
+                    <p class="modal-card-title">
+                      Deleting message <%= message._id %>
+                    </p>
+                    <button class="delete" aria-label="close"></button>
+                  </header>
+                  <section class="modal-card-body">
+                    <form
+                      action="/message/delete/<%= message._id %>"
+                      method="POST"
+                    >
+                      <div>Are you sure you want to delete this message?</div>
+                      <div class="field" style="padding-top: 10px">
+                        <button class="button is-success">Delete</button>
+                      </div>
+                    </form>
+                  </section>
+                  <footer class="modal-card-foot">
+                    <span>Click anywhere outside modal to cancel.</span>
+                  </footer>
+                </div>
+              </div>
+              <% } %>
             </div>
             <div class="message-body"><%= message.text %></div>
-            <div class="message-footer">
-              <p>
+            <div class="message-footer columns">
+              <p class="column is-three-quarters">
                 <%= message.postedBy.username %> <strong>at</strong> <%=
                 message.timestamp %>
               </p>
@@ -77,6 +121,13 @@
           <article class="message">
             <div class="message-header">
               <p><%= message.title %></p>
+              <!-- edit message modal trigger btn -->
+              <% if (user._id.toString() === message.postedBy._id.toString()) {
+              %>
+              <a href="/message/edit/<%= message._id %>"
+                ><button>Edit <%= message._id %></button></a
+              >
+              <% } %>
             </div>
             <div class="message-body"><%= message.text %></div>
             <div class="message-footer"></div>
