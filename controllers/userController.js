@@ -48,7 +48,10 @@ exports.post_membership_verification = [
     process.env.MEMBERSHIP_KEY.split(";").map((key) => {
       console.log(`membership_key `, key);
     });
-
+    console.log(`is_member: ${req.body.is_member}`);
+    console.log(`req.user.id ${req.user.id}`);
+    const existingUser = await User.findOne({ _id: req.user.id });
+    // if user exists, check membership status and admin status ... TODO
     if (!err.isEmpty()) {
       console.log(req.user);
       res.render("user_verify_membership", {
