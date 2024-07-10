@@ -373,3 +373,16 @@ exports.delete_profile_post = asyncHandler(async (req, res, next) => {
     res.redirect("/message");
   }
 });
+
+exports.index = asyncHandler(async (req, res, next) => {
+  // res.send(`NOT IMPLEMENTED users_index`);
+  const usersList = await User.find({ isAdmin: false })
+    .sort({ username: 1 })
+    .exec();
+  res.render("users_list", {
+    title: "List of Users",
+    users: usersList,
+    err: undefined,
+    user: req.user,
+  });
+});

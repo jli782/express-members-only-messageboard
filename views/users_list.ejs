@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <%- include('header') -%>
+    <div class="container">
+      <div class="notification is-primary">
+        <h1 class="title"><%= title %></h1>
+        <div class="section">
+          <% if (users.length > 0 ){ %>
+          <div class="field is-size-6">
+            List of users registered to members-only message board (includes
+            non-verified members).
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>Membership Status</th>
+                <th>Link to Profile</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let member of users){ %>
+              <tr>
+                <td><%= member.username %></td>
+                <td><%= member._id %></td>
+                <td>
+                  <%= member.fullName.first %> <%= member.fullName.last %>
+                </td>
+                <td>
+                  <% if (member.membershipStatus) { %>
+                  <span class="has-text-white-ter">Yes</span>
+                  <% } else { %>
+                  <span class="has-text-warning">No</span>
+                  <% } %>
+                </td>
+                <td><a href="/users/profile/<%= member._id %>">Link</a></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+          <% } else { %>
+          <div class="field is-size-6">
+            There are currently no active members in members-only message board
+            (includes non-verified members).
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <%- include('footer') -%>
+  </body>
+</html>

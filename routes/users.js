@@ -22,4 +22,6 @@ router.post("/profile/:id", user.update_profile_post);
 router.get("/profile/:id/delete", user.get_profile_delete);
 router.post("/profile/:id/delete", user.delete_profile_post);
 
+router.get("/list", user.index);
+
 module.exports = router;

@@ -27,6 +27,10 @@
           <span aria-hidden="true"></span>
         </a>
       </div>
+      <!-- navbar item -->
+      <% if (user != undefined && user.isAdmin){ %>
+      <a class="navbar-item" href="/users/list"> Users </a>
+      <% } %>
 
       <div class="navbar-end">
         <div class="navbar-item">
