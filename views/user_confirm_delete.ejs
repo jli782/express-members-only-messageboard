@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %> - <%= user_to_delete._id %></title>
+  </head>
+  <body>
+    <%- include('header') -%>
+    <div class="container">
+      <div class="notification is-primary">
+        <h1 class="title"><%= title %> - <%= user_to_delete._id %></h1>
+        <hr />
+        <div class="section">
+          <div class="field is-size-4">
+            Do you really want to delete user <%= user_to_delete._id %>?
+          </div>
+          <% if (messages_to_delete.length > 0){ %> <% if (err){%> <% if
+          (err.msg != undefined){%>
+          <p class="has-text-danger"><%= err.msg %></p>
+          <% } else {%> <% for (let error of err){%>
+          <p class="has-text-danger"><%= error.msg %></p>
+          <% }%> <% } %> <%}%>
+          <div class="field is-size-6">
+            Please delete the following messages before deleting user <%=
+            user_to_delete._id %>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Timestamp</th>
+                <th>Link to Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let msg of messages_to_delete){ %>
+              <tr>
+                <td><%= msg.title %></td>
+                <td><%= msg.timestamp %></td>
+                <td>
+                  <!-- delete message modal trigger btn -->
+                  <button
+                    class="js-modal-trigger"
+                    data-target="modal-delete-message <%= msg._id %>"
+                  >
+                    Delete <%= msg._id %>
+                  </button>
+                  <!-- delete message modal -->
+                  <div id="modal-delete-message <%= msg._id %>" class="modal">
+                    <div class="modal-background"></div>
+
+                    <div class="modal-card">
+                      <header class="modal-card-head">
+                        <p class="modal-card-title">
+                          Deleting message <%= msg._id %>
+                        </p>
+                        <button class="delete" aria-label="close"></button>
+                      </header>
+                      <section class="modal-card-body">
+                        <form
+                          action="/message/delete/<%= msg._id %>"
+                          method="POST"
+                        >
+                          <div>
+                            Are you sure you want to delete this message?
+                          </div>
+                          <div class="field" style="padding-top: 10px">
+                            <button class="button is-success">Delete</button>
+                          </div>
+                        </form>
+                      </section>
+                      <footer class="modal-card-foot">
+                        <span>Click anywhere outside modal to cancel.</span>
+                      </footer>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+          <% } %>
+
+          <div class="field is-grouped">
+            <form action="" method="POST">
+              <button
+                type="submit"
+                class="button is-light"
+                style="margin-top: 15px"
+              >
+                Confirm Delete
+              </button>
+            </form>
+            <a href="/message">
+              <button class="button is-light" style="margin-top: 15px">
+                Cancel
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('footer') -%>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Functions to open and close a modal
+        function openModal($el) {
+          $el.classList.add("is-active");
+        }
+
+        function closeModal($el) {
+          $el.classList.remove("is-active");
+        }
+
+        function closeAllModals() {
+          (document.querySelectorAll(".modal") || []).forEach(($modal) => {
+            closeModal($modal);
+          });
+        }
+
+        // Add a click event on buttons to open a specific modal
+        (document.querySelectorAll(".js-modal-trigger") || []).forEach(
+          ($trigger) => {
+            const modal = $trigger.dataset.target;
+            const $target = document.getElementById(modal);
+
+            $trigger.addEventListener("click", () => {
+              openModal($target);
+            });
+          }
+        );
+
+        // Add a click event on various child elements to close the parent modal
+        (
+          document.querySelectorAll(
+            ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
+          ) || []
+        ).forEach(($close) => {
+          const $target = $close.closest(".modal");
+
+          $close.addEventListener("click", () => {
+            closeModal($target);
+          });
+        });
+
+        // Add a keyboard event to close all modals
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            closeAllModals();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

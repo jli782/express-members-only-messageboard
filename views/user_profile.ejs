@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %> - <%= user.username %></title>
+  </head>
+  <body>
+    <%- include('header') -%>
+    <div class="container">
+      <div class="notification is-primary">
+        <h1 class="title">Account Profile</h1>
+        <div class="section">
+          <% if (user.isAdmin && user_to_delete._id.toString() !==
+          user._id.toString()) { %>
+          <p>
+            Hi there Admin <%= user.username %>, these are the account profile
+            details you queried.
+          </p>
+          <p>
+            If you wish to delete this user's profile, please click "Delete"
+            button.
+          </p>
+          <% } else { %>
+          <p>
+            Hi there <%= user.username %>, these are your account profile
+            details.
+          </p>
+          <p>
+            If you wish to update your profile, please enter any updated
+            information on the relevant fields and click "Update" button.
+          </p>
+          <% } %>
+          <hr />
+          <% if (user != undefined && !user.isAdmin){ %>
+          <form action="" method="POST">
+            <div class="field">
+              <label for="username" class="label">Username</label>
+              <div class="control">
+                <input
+                  name="username"
+                  class="input"
+                  type="email"
+                  required
+                  placeholder="username goes here ..."
+                  value="<% if (user != undefined){ %><%= user.username %><% } %>"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="first" class="label">First Name</label>
+              <div class="control">
+                <input
+                  name="first"
+                  class="input"
+                  type="text"
+                  required
+                  placeholder="first name goes here ..."
+                  value="<% if (user != undefined){ %><%= user.fullName.first %><% } %>"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="last" class="label">Surname</label>
+              <div class="control">
+                <input
+                  name="last"
+                  class="input"
+                  type="text"
+                  required
+                  placeholder="Surname goes here ..."
+                  value="<% if (user != undefined){ %><%= user.fullName.last %><% } %>"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="password" class="label">New Password</label>
+              <div class="control">
+                <input
+                  name="password"
+                  class="input"
+                  type="password"
+                  placeholder="Password goes here ..."
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="confirm_password" class="label"
+                >Confirm New Password</label
+              >
+              <div class="control">
+                <input
+                  name="confirm_password"
+                  class="input"
+                  type="password"
+                  placeholder="confirm your password  here ..."
+                />
+              </div>
+            </div>
+            <p>
+              <strong>Membership status:</strong> <% if (user.membershipStatus)
+              { %>
+              <span class="has-text-white-ter">Yes</span>
+              <% } else { %>
+              <span class="has-text-warning">No</span>
+              <% } %>
+            </p>
+            <button
+              type="submit"
+              class="button is-light"
+              style="margin-top: 15px"
+            >
+              Update
+            </button>
+
+            <% if (err){%> <% if (err.msg != undefined){%>
+            <p class="has-text-danger"><%= err.msg %></p>
+            <% } else {%> <% for (let error of err){%>
+            <p class="has-text-danger"><%= error.msg %></p>
+            <% }%> <% } %> <%}%>
+          </form>
+          <% } else if (user.isAdmin){ %> <% if (user_to_delete != undefined){
+          %>
+
+          <div class="field">
+            <label for="username" class="label">Username</label>
+            <div class="control">
+              <input
+                disabled
+                name="username"
+                class="input"
+                type="email"
+                required
+                placeholder="username goes here ..."
+                value="<% if (user_to_delete != undefined){ %><%= user_to_delete.username %><% } %>"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="first" class="label">First Name</label>
+            <div class="control">
+              <input
+                disabled
+                name="first"
+                class="input"
+                type="text"
+                required
+                placeholder="first name goes here ..."
+                value="<% if (user_to_delete != undefined){ %><%= user_to_delete.fullName.first %><% } %>"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="last" class="label">Surname</label>
+            <div class="control">
+              <input
+                disabled
+                name="last"
+                class="input"
+                type="text"
+                required
+                placeholder="Surname goes here ..."
+                value="<% if (user_to_delete != undefined){ %><%= user_to_delete.fullName.last %><% } %>"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="password" class="label">New Password</label>
+            <div class="control">
+              <input
+                disabled
+                name="password"
+                class="input"
+                type="password"
+                placeholder="Password goes here ..."
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="confirm_password" class="label"
+              >Confirm New Password</label
+            >
+            <div class="control">
+              <input
+                disabled
+                name="confirm_password"
+                class="input"
+                type="password"
+                placeholder="confirm your password  here ..."
+              />
+            </div>
+          </div>
+          <p>
+            <strong>Membership status:</strong> <% if (user.membershipStatus) {
+            %>
+            <span class="has-text-white-ter">Yes</span>
+            <% } else { %>
+            <span class="has-text-warning">No</span>
+            <% } %>
+          </p>
+          <a href="/users/profile/<%= user_to_delete._id %>/delete">
+            <button
+              type="submit"
+              class="button is-light"
+              style="margin-top: 15px"
+            >
+              Delete
+            </button>
+          </a>
+          <% } else { %>
+          <form action="" method="POST">
+            <div class="field">
+              <label for="username" class="label">Username</label>
+              <div class="control">
+                <input
+                  name="username"
+                  class="input"
+                  type="email"
+                  required
+                  placeholder="username goes here ..."
+                  value="<% if (user != undefined){ %><%= user.username %><% } %>"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="first" class="label">First Name</label>
+              <div class="control">
+                <input
+                  name="first"
+                  class="input"
+                  type="text"
+                  required
+                  placeholder="first name goes here ..."
+                  value="<% if (user != undefined){ %><%= user.fullName.first %><% } %>"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="last" class="label">Surname</label>
+              <div class="control">
+                <input
+                  name="last"
+                  class="input"
+                  type="text"
+                  required
+                  placeholder="Surname goes here ..."
+                  value="<% if (user != undefined){ %><%= user.fullName.last %><% } %>"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="password" class="label">New Password</label>
+              <div class="control">
+                <input
+                  name="password"
+                  class="input"
+                  type="password"
+                  placeholder="Password goes here ..."
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="confirm_password" class="label"
+                >Confirm New Password</label
+              >
+              <div class="control">
+                <input
+                  name="confirm_password"
+                  class="input"
+                  type="password"
+                  placeholder="confirm your password  here ..."
+                />
+              </div>
+            </div>
+            <p>
+              <strong>Membership status:</strong> <% if (user.membershipStatus)
+              { %>
+              <span class="has-text-white-ter">Yes</span>
+              <% } else { %>
+              <span class="has-text-warning">No</span>
+              <% } %>
+            </p>
+            <button
+              type="submit"
+              class="button is-light"
+              style="margin-top: 15px"
+            >
+              Update
+            </button>
+
+            <% if (err){%> <% if (err.msg != undefined){%>
+            <p class="has-text-danger"><%= err.msg %></p>
+            <% } else {%> <% for (let error of err){%>
+            <p class="has-text-danger"><%= error.msg %></p>
+            <% }%> <% } %> <%}%>
+          </form>
+          <% } %> <% if (err){%> <% if (err.msg != undefined){%>
+          <p class="has-text-danger"><%= err.msg %></p>
+          <% } else {%> <% for (let error of err){%>
+          <p class="has-text-danger"><%= error.msg %></p>
+          <% }%> <% } %> <%}%> <% } %>
+        </div>
+      </div>
+    </div>
+
+    <%- include('footer') -%>
+  </body>
+</html>
