@@ -34,7 +34,10 @@
             <!-- <a href="/" class="button is-light"> Log in </a> -->
             <!-- if user is logged in -->
             <% if (user !== undefined){ %>
-            <p>Welcome back <%= user.username%>!</p>
+            <p>
+              Welcome back
+              <a href="/users/profile/<%= user._id %>"><%= user.username%></a>!
+            </p>
             <a href="/users/sign-out" class="button is-light">Log out</a>
             <% } else { %>
             <!-- if user is NOT logged in -->
