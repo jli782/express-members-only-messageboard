@@ -20,6 +20,7 @@
                 type="email"
                 required
                 placeholder="username goes here ..."
+                value="<% if (form_user != undefined) { %><%= form_user.username %><% }%>"
               />
             </div>
           </div>
@@ -32,6 +33,7 @@
                 type="text"
                 required
                 placeholder="first name goes here ..."
+                value="<% if (form_user != undefined) { %><%= form_user.fullName.first %><% }%>"
               />
             </div>
           </div>
@@ -44,6 +46,7 @@
                 type="text"
                 required
                 placeholder="Surname goes here ..."
+                value="<% if (form_user != undefined) { %><%= form_user.fullName.last %><% }%>"
               />
             </div>
           </div>
@@ -72,12 +75,11 @@
             </div>
           </div>
           <button type="submit" class="button is-light">Register</button>
-          <% if (err){ %> <% if (err.length > 1) { %> <% for (let error of err){
-          %>
-          <p><%= error.msg %></p>
-          <% }%> <% } else { %>
-          <p><%= err.msg %></p>
-          <% } %> <% } %>
+          <% if (err){%> <% if (err.msg != undefined){%>
+          <p class="has-text-danger"><%= err.msg %></p>
+          <% } else {%> <% for (let error of err){%>
+          <p class="has-text-danger"><%= error.msg %></p>
+          <% }%> <% } %> <%}%>
         </form>
       </div>
     </div>

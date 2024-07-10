@@ -7,6 +7,7 @@ const user = require("../controllers/userController.js");
 // });
 
 router.get("/", user.get_sign_in);
+router.get("/sign-in-failure", user.get_sign_in_failure);
 router.post("/", user.post_sign_in);
 router.get("/verify-membership", user.get_membership_verification);
 router.post("/verify-membership", user.post_membership_verification);

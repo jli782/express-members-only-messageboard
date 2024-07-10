@@ -10,7 +10,7 @@
     <div class="container">
       <div class="notification is-primary">
         <h1 class="title">User Sign In</h1>
-        <form method="POST" action="">
+        <form method="POST" action="/users">
           <div class="field">
             <label for="username" class="label">Username</label>
             <div class="control">
@@ -36,12 +36,11 @@
             </div>
           </div>
           <button type="submit" class="button is-light">Sign In</button>
-          <% if (err){ %> <% if (err.length > 1) { %> <% for (let error of err){
-          %>
-          <p><%= error.msg %></p>
-          <% }%> <% } else { %>
-          <p><%= err.msg %></p>
-          <% } %> <% } %>
+          <% if (err){%> <% if (err.msg != undefined){%>
+          <p class="has-text-danger"><%= err.msg %></p>
+          <% } else {%> <% for (let error of err){%>
+          <p class="has-text-danger"><%= error.msg %></p>
+          <% }%> <% } %> <%}%>
         </form>
       </div>
     </div>
