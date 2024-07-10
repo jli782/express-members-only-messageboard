@@ -112,12 +112,12 @@
             <div class="message-body"><%= message.text %></div>
             <div class="message-footer columns">
               <p class="column is-three-quarters">
-                <% if (user.isAdmin){ %>
+                <% if (user.isAdmin){ %><strong>Posted by </strong>
                 <a href="/users/profile/<%= message.postedBy._id %>"
                   ><%= message.postedBy.username %></a
                 >
                 <% } else { %> <%= message.postedBy.username %> <% } %>
-                <strong>at</strong> <%= message.timestamp %>
+                <strong>at</strong> <%= message.formatted_timestamp %>
               </p>
             </div>
           </article>
@@ -136,8 +136,8 @@
             <div class="message-body"><%= message.text %></div>
             <div class="message-footer">
               <% if (user._id.toString() === message.postedBy._id.toString()){
-              %> <%= message.postedBy.username %> <strong>at</strong> <%=
-              message.timestamp %> <% } %>
+              %><strong>Posted by</strong> <%= message.postedBy.username %>
+              <strong>at</strong> <%= message.formatted_timestamp %> <% } %>
             </div>
           </article>
           <% } %> <% } %>
