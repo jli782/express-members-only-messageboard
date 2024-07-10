@@ -11,8 +11,8 @@
       <div class="notification is-primary">
         <h1 class="title">Account Profile</h1>
         <div class="section">
-          <% if (user.isAdmin && user_to_delete._id.toString() !==
-          user._id.toString()) { %>
+          <% if (user.isAdmin && user_to_delete != undefined &&
+          user_to_delete._id.toString() !== user._id.toString()) { %>
           <p>
             Hi there Admin <%= user.username %>, these are the account profile
             details you queried.
