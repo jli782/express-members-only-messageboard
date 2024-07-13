@@ -19,7 +19,7 @@ const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 require("dotenv").config();
 
-const db_connection_str = process.env.DB_URL;
+const db_connection_str = process.env.PROD_DB_URL || process.env.DB_URL;
 async function main() {
   await mongoose.connect(db_connection_str);
 }
