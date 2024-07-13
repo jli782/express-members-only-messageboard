@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "serverstart": "set DEBUG=members-only-messageboard:* & npm start"
+    "serverstart": "set DEBUG=members-only-messageboard:* & npm start",
+    "debugstart": "set DEBUG=user,message & npm start"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

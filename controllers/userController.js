@@ -5,9 +5,9 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 require("dotenv").config();
+const debug = require("debug")("user");
 
 exports.get_sign_in = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: get_sign_in`);
   res.render("user_sign_in", {
     err: undefined,
     user: undefined,
@@ -28,8 +28,7 @@ exports.post_sign_in = passport.authenticate("local", {
 });
 
 exports.get_sign_in_failure = asyncHandler(async (req, res, next) => {
-  console.log(`failure req.user`, req.user);
-  // res.send(`NOT IMPLEMENTED: SIGN IN FAILURE`);
+  debug(`failure req.user`, req.user);
   const err = { msg: `Incorrect username or password.` };
   res.render("user_sign_in", {
     err: err,
@@ -38,8 +37,7 @@ exports.get_sign_in_failure = asyncHandler(async (req, res, next) => {
 });
 
 exports.get_membership_verification = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: get_membership_verification`);
-  console.log(`get_membership_verification: ${req.user}`);
+  debug(`get_membership_verification: ${req.user}`);
   res.render("user_verify_membership", {
     title: `Verify Membership`,
     err: undefined,
@@ -52,20 +50,19 @@ exports.post_membership_verification = [
     .isLength({ min: 1 })
     .withMessage("Membership is empty"),
   asyncHandler(async (req, res, next) => {
-    // res.send(`NOT IMPLEMENTED: post_membership_verification`);
     const err = validationResult(req);
 
-    console.log(`process.env.MEMBERSHIP_KEY ${process.env.MEMBERSHIP_KEY}`);
+    debug(`process.env.MEMBERSHIP_KEY ${process.env.MEMBERSHIP_KEY}`);
     process.env.MEMBERSHIP_KEY.split(";").map((key) => {
-      console.log(`membership_key `, key);
+      debug(`membership_key `, key);
     });
-    console.log(`is_member: ${req.body.is_member}`);
-    console.log(`req.user.id ${req.user.id}`);
+    debug(`is_member: ${req.body.is_member}`);
+    debug(`req.user.id ${req.user.id}`);
     const existingUser = await User.findOne({ _id: req.user.id });
-    console.log(`existingUser ${existingUser}`);
+    debug(`existingUser ${existingUser}`);
     // if user exists, check membership status and admin status ... TODO
     if (!err.isEmpty()) {
-      console.log(req.user);
+      debug(req.user);
       res.render("user_verify_membership", {
         title: `Verify Membership`,
         err: err.array(),
@@ -130,7 +127,7 @@ exports.post_membership_verification = [
   }),
 ];
 exports.get_sign_out = asyncHandler(async (req, res, next) => {
-  console.log(`signing out ${req.user}`);
+  debug(`signing out ${req.user}`);
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -140,7 +137,6 @@ exports.get_sign_out = asyncHandler(async (req, res, next) => {
 });
 
 exports.get_register = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: get_register`);
   res.render("user_register", {
     err: undefined,
     user: undefined,
@@ -163,14 +159,13 @@ exports.post_register = [
     .isLength({ min: 1 })
     .withMessage(`Confirmed Password is empty.`),
   asyncHandler(async (req, res, next) => {
-    // res.send(`NOT IMPLEMENTED: post_register`);
     const err = validationResult(req);
     try {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(req.body.password, salt);
       const hash2 = bcrypt.hashSync(req.body.confirm_password, salt);
-      console.log(`posting a new user`);
-      console.log(`hash ${hash} | hash2 ${hash2}`);
+      debug(`posting a new user`);
+      debug(`hash ${hash} | hash2 ${hash2}`);
 
       const user = new User({
         fullName: {
@@ -180,7 +175,7 @@ exports.post_register = [
         username: req.body.username,
         password: hash, // hash the password here ...
       });
-      console.log(`user`, user);
+      debug(`user`, user);
 
       if (!err.isEmpty()) {
         res.render("user_register", {
@@ -190,7 +185,7 @@ exports.post_register = [
         });
         return;
       } else if (req.body.password !== req.body.confirm_password) {
-        console.log(`comparing hash and hash2 ...`);
+        debug(`comparing hash and hash2 ...`);
         // if (hash != hash2)) {
         //   console.log(`not same passwords ${bcrypt.compareSync(hash, hash2)}`);
         res.render("user_register", {
@@ -201,7 +196,7 @@ exports.post_register = [
         return;
       } else {
         await user.save();
-        console.log(`redirecting user to login`);
+        debug(`redirecting user to login`);
         res.redirect("/users"); // redirects user to login
       }
     } catch (err) {
@@ -211,8 +206,7 @@ exports.post_register = [
 ];
 
 exports.get_profile = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: get_profile ${req.params.id}`);
-  console.log(`req.params.id ${req.params.id} | req.user.id ${req.user.id}`);
+  debug(`req.params.id ${req.params.id} | req.user.id ${req.user.id}`);
   // params user vs session user
   if (req.params.id === req.user.id) {
     res.render("user_profile", {
@@ -250,15 +244,14 @@ exports.update_profile_post = [
     .isLength({ min: 1 })
     .withMessage(`Confirmed Password is empty.`),
   asyncHandler(async (req, res, next) => {
-    // res.send(`NOT IMPLEMENTED: update_profile_post ${req.params.id}`);
     const err = validationResult(req);
     try {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(req.body.password, salt);
       const hash2 = bcrypt.hashSync(req.body.confirm_password, salt);
-      console.log(`updating user ${req.params.id}`);
-      console.log(`hash ${hash} | hash2 ${hash2}`);
-      console.log(
+      debug(`updating user ${req.params.id}`);
+      debug(`hash ${hash} | hash2 ${hash2}`);
+      debug(
         `req.body.password: ${req.body.password.length} | req.body.confirm_password: ${req.body.confirm_password.length}`
       );
 
@@ -278,11 +271,11 @@ exports.update_profile_post = [
       ) {
         updatedUser.password = req.user.password;
       }
-      console.log(`updatedUser`, updatedUser);
+      debug(`updatedUser`, updatedUser);
 
       if (!err.isEmpty()) {
-        err.array().map((e) => console.log(`updating user err: `, e));
-        console.log(`err.msg ${err.msg}`);
+        err.array().map((e) => debug(`updating user err: `, e));
+        debug(`err.msg ${err.msg}`);
         res.render("user_profile", {
           title: "User Profile",
           user: updatedUser,
@@ -290,7 +283,7 @@ exports.update_profile_post = [
         });
         return;
       } else if (req.body.password !== req.body.confirm_password) {
-        console.log(`comparing hash and hash2 ...`);
+        debug(`comparing hash and hash2 ...`);
         res.render("user_profile", {
           title: "User Profile",
           err: { msg: `Password and Confirmed Password are not the same!` },
@@ -298,14 +291,14 @@ exports.update_profile_post = [
         });
         return;
       } else {
-        console.log(`is it admin: ${req.user}`);
+        debug(`is it admin: ${req.user}`);
         if (req.user.isAdmin) {
           updatedUser.isAdmin = true;
           updatedUser.membershipStatus = true;
         }
-        console.log(`maintaining admin status: ${req.user}`);
+        debug(`maintaining admin status: ${req.user}`);
         await User.findOneAndUpdate({ _id: req.params.id }, updatedUser, {});
-        console.log(`redirecting user to message board`);
+        debug(`redirecting user to message board`);
         res.redirect("/message");
       }
     } catch (err) {
@@ -315,8 +308,6 @@ exports.update_profile_post = [
 ];
 
 exports.get_profile_delete = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: get_profile_delete ${req.params.id}`);
-
   const deleteUser = await User.findById(req.params.id).exec();
   const deleteUserMessages = await Message.find(
     { postedBy: req.params.id },
@@ -328,7 +319,7 @@ exports.get_profile_delete = asyncHandler(async (req, res, next) => {
   if (!deleteUser) {
     res.redirect("/message");
   } else {
-    console.log(
+    debug(
       `delete confirm : ${req.user} | ${deleteUser} | ${deleteUserMessages.length}`
     );
     res.render("user_confirm_delete", {
@@ -341,7 +332,6 @@ exports.get_profile_delete = asyncHandler(async (req, res, next) => {
   }
 });
 exports.delete_profile_post = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: delete_profile_post ${req.params.id}`);
   const deleteUser = await User.findById(req.params.id).exec();
 
   const deleteUserMessages = await Message.find(
@@ -366,7 +356,7 @@ exports.delete_profile_post = asyncHandler(async (req, res, next) => {
     });
     return;
   } else {
-    console.log(
+    debug(
       `delete confirm : ${deleteUser} | will be deleted by admin: ${req.user}`
     );
     await User.findByIdAndDelete(req.params.id).exec();
@@ -375,7 +365,6 @@ exports.delete_profile_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.index = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED users_index`);
   const usersList = await User.find({ isAdmin: false })
     .sort({ username: 1 })
     .exec();

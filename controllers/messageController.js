@@ -3,13 +3,13 @@ const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 require("dotenv").config();
+const debug = require("debug")("message");
 
 exports.index = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: index - get list of message (message board)`);
   const messages = await Message.find({})
     .populate("postedBy", "username")
     .exec();
-  console.log(`messages: ${messages} | user: ${req.user}`);
+  debug(`messages: ${messages} | user: ${req.user}`);
 
   if (!req.user) {
     res.redirect("/");
@@ -23,9 +23,9 @@ exports.index = asyncHandler(async (req, res, next) => {
   }
 });
 
-exports.get_message_form = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: get_message_form to create message`);
-});
+// exports.get_message_form = asyncHandler(async (req, res, next) => {
+//   res.send(`NOT IMPLEMENTED: get_message_form to create message`);
+// });
 exports.create_message = [
   body(`text`)
     .trim()
@@ -38,14 +38,13 @@ exports.create_message = [
     .isLength({ min: 1 })
     .withMessage(`Title is empty`),
   asyncHandler(async (req, res, next) => {
-    // res.send(`NOT IMPLEMENTED: create_message`);
     const err = validationResult(req);
     const messages = await Message.find({})
       .populate("postedBy", "username")
       .exec();
 
     if (!err.isEmpty()) {
-      err.array().map((err) => console.log(err));
+      err.array().map((err) => debug(err));
       res.render("message_board", {
         title: "Message Board",
         err: err.array(),
@@ -60,7 +59,7 @@ exports.create_message = [
         timestamp: new Date(),
         postedBy: req.user,
       });
-      console.log(`posted message: ${message}`);
+      debug(`posted message: ${message}`);
 
       await message.save();
       res.redirect("/message");
@@ -70,7 +69,6 @@ exports.create_message = [
 ];
 
 exports.edit_message_get = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: edit_message_get ${req.params.id}`);
   const message = await Message.findOne({ _id: req.params.id }).exec();
   if (!message) {
     res.redirect("/message");
@@ -96,7 +94,6 @@ exports.edit_message = [
     .isLength({ min: 1 })
     .withMessage(`Title is empty`),
   asyncHandler(async (req, res, next) => {
-    // res.send(`NOT IMPLEMENTED: edit_message ${req.params.id}`);
     const err = validationResult(req);
 
     const updatedMessage = new Message({
@@ -107,8 +104,8 @@ exports.edit_message = [
       postedBy: req.user,
     });
     if (!err.isEmpty()) {
-      console.log(`error when updating message`);
-      err.array().map((err) => console.log(err));
+      debug(`error when updating message`);
+      err.array().map((err) => debug(err));
       res.render("user_edit_message", {
         title: "Editing Message",
         user: req.user,
@@ -117,7 +114,7 @@ exports.edit_message = [
       });
       return;
     } else {
-      console.log(`updated message: ${updatedMessage}`);
+      debug(`updated message: ${updatedMessage}`);
 
       await Message.findOneAndUpdate(
         { _id: req.params.id },
@@ -130,12 +127,11 @@ exports.edit_message = [
   }),
 ];
 
-exports.delete_message_get = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: delete_message_get ${req.params.id}`);
-});
-exports.delete_message = asyncHandler(async (req, res, next) => {
-  // res.send(`NOT IMPLEMENTED: delete_message ${req.params.id}`);
+// exports.delete_message_get = asyncHandler(async (req, res, next) => {
+//   res.send(`NOT IMPLEMENTED: delete_message_get ${req.params.id}`);
+// });
 
+exports.delete_message = asyncHandler(async (req, res, next) => {
   await Message.findByIdAndDelete(req.params.id);
   res.redirect("/message");
 });
