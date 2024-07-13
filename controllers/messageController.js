@@ -11,6 +11,11 @@ exports.index = asyncHandler(async (req, res, next) => {
     .exec();
   debug(`messages: ${messages} | user: ${req.user}`);
 
+  messages.map((msg) => {
+    msg.title = msg.title.replaceAll("&#x27;", "'");
+    msg.text = msg.text.replaceAll("&#x27;", "'");
+  });
+
   if (!req.user) {
     res.redirect("/");
   } else {

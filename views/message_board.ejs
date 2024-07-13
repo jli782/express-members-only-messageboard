@@ -63,22 +63,22 @@
         <div class="section">
           <% for (let message of messages){ %> <% if (user.membershipStatus){ %>
           <article class="message">
-            <div class="message-header">
-              <p><%= message.title %></p>
+            <div class="message-header" style="padding: 5px">
+              <p class="column is-9"><%= message.title %></p>
               <!-- edit message modal trigger btn -->
               <% if (user._id.toString() === message.postedBy._id.toString()) {
               %>
-              <a href="/message/edit/<%= message._id %>"
-                ><button>Edit <%= message._id %></button></a
+              <a href="/message/edit/<%= message._id %>" class="column is-1"
+                ><button messageID="<%= message._id %>">Edit</button></a
               >
               <% } %>
               <!-- delete message modal trigger btn -->
               <% if (user.isAdmin){ %>
               <button
-                class="js-modal-trigger"
+                class="js-modal-trigger column is-1"
                 data-target="modal-delete-message <%= message._id %>"
               >
-                Delete <%= message._id %>
+                Delete
               </button>
               <!-- delete message modal -->
               <div id="modal-delete-message <%= message._id %>" class="modal">
@@ -129,7 +129,7 @@
               <% if (user._id.toString() === message.postedBy._id.toString()) {
               %>
               <a href="/message/edit/<%= message._id %>"
-                ><button>Edit <%= message._id %></button></a
+                ><button messageID="<%= message._id %>">Edit</button></a
               >
               <% } %>
             </div>
