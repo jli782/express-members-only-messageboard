@@ -7,6 +7,14 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const helmet = require("helmet");
+const compression = require("compression");
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-7",
+});
+
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 require("dotenv").config();
@@ -37,6 +45,10 @@ app.use(
     },
   })
 );
+// compression middleware
+app.use(compression());
+// express-rate-limit middleware
+app.use(limiter);
 
 // routes
 const indexRouter = require("./routes/index");
