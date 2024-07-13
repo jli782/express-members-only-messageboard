@@ -308,14 +308,12 @@ exports.update_profile_post = [
 ];
 
 exports.get_profile_delete = asyncHandler(async (req, res, next) => {
-  const deleteUser = await User.findById(req.params.id).exec();
-  const deleteUserMessages = await Message.find(
-    { postedBy: req.params.id },
-    "title timestamp text"
-  )
-    .sort({ timestamp: 1 })
-    .exec();
-
+  const [deleteUser, deleteUserMessages] = await Promise.all([
+    User.findById(req.params.id).exec(),
+    Message.find({ postedBy: req.params.id }, "title timestamp text")
+      .sort({ timestamp: 1 })
+      .exec(),
+  ]);
   if (!deleteUser) {
     res.redirect("/message");
   } else {
@@ -332,15 +330,12 @@ exports.get_profile_delete = asyncHandler(async (req, res, next) => {
   }
 });
 exports.delete_profile_post = asyncHandler(async (req, res, next) => {
-  const deleteUser = await User.findById(req.params.id).exec();
-
-  const deleteUserMessages = await Message.find(
-    { postedBy: req.params.id },
-    "title timestamp text"
-  )
-    .sort({ timestamp: 1 })
-    .exec();
-
+  const [deleteUser, deleteUserMessages] = await Promise.all([
+    User.findById(req.params.id).exec(),
+    Message.find({ postedBy: req.params.id }, "title timestamp text")
+      .sort({ timestamp: 1 })
+      .exec(),
+  ]);
   if (!deleteUser) {
     res.redirect("/message");
   } else if (deleteUserMessages.length > 0) {
