@@ -6,6 +6,7 @@ const logger = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const helmet = require("helmet");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 require("dotenv").config();
@@ -23,14 +24,24 @@ const sessionStore = MongoStore.create({
   collection: "sessions",
 });
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const messageRouter = require("./routes/message");
-
 // require the passport middleware so app knows and uses it
 require("./passport/auth");
 
 const app = express();
+
+// helmet to set CSP headers
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "script-src": ["'self", "cdn.jsdelivr.net", "'nonce-rAnd0m'"],
+    },
+  })
+);
+
+// routes
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const messageRouter = require("./routes/message");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
